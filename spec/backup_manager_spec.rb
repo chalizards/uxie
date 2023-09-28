@@ -2,6 +2,7 @@
 
 RSpec.describe 'BackupManager' do
   require 'backup_manager'
+  require 'plan'
 
   context 'expired?' do
     it 'returns false when inputed date is under expiration date' do

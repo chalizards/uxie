@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-require 'backup_manager'
-
 RSpec.describe 'BackupManager' do
+  require 'backup_manager'
+  require 'plan'
+
   context 'expired?' do
     it 'returns false when inputed date is under expiration date' do
+      plan_start_date = Date.parse('2023-09-27')
       input_date = '2023-09-27'
 
-      allow(Date).to receive(:today).and_return(input_date)
+      allow(Date).to receive(:today).and_return(plan_start_date)
 
       backup = BackupManager.new('beginner', input_date)
 

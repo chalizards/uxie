@@ -5,7 +5,7 @@ RSpec.describe 'Plan' do
   require 'date'
 
   context 'calculate_plan_days' do
-    date = Date.parse('2023-09-27')
+    date = '2023-09-27'
 
     it 'returns 42 days for beginner plan' do
       plan = Plan.new('beginner', date)

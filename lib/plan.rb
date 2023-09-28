@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 class Plan
   require 'date'
+
+  attr_reader :plan_name, :start_date
 
   PLAN_DAYS = 42
   PLAN_MONTHS = 12
@@ -7,7 +11,7 @@ class Plan
 
   def initialize(plan_name, start_date)
     @plan_name = plan_name.to_sym
-    @start_date = start_date
+    @start_date = check_plan_start_date(start_date)
   end
 
   def calculate_plan_days
@@ -21,6 +25,14 @@ class Plan
   end
 
   private
+
+  def check_plan_start_date(plan_start_date)
+    if plan_start_date
+      Date.parse(plan_start_date)
+    else
+      Date.today
+    end
+  end
 
   def plan_duration_in_days
     plan = plans[@plan_name]

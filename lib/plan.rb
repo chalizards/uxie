@@ -10,7 +10,7 @@ class Plan
   PLAN_YEARS = 7
 
   def initialize(plan_name, start_date)
-    @plan_name = plan_name.to_sym
+    @plan_name = check_plan_name(plan_name)
     @start_date = check_plan_start_date(start_date)
   end
 
@@ -25,6 +25,27 @@ class Plan
   end
 
   private
+
+  def check_plan_name(plan_name)
+    plan_name = format_plan_name(plan_name)
+
+    if valid_plan_name?(plan_name)
+      plan_name
+    else
+      raise ArgumentError, 'Invalid plan name'
+    end
+  end
+
+  def format_plan_name(plan_name)
+    plan_name = plan_name.downcase
+    plan_name_sym = plan_name.to_sym
+
+    plan_name_sym
+  end
+
+  def valid_plan_name?(plan_name)
+    plans.keys.include?(plan_name)
+  end
 
   def check_plan_start_date(plan_start_date)
     if plan_start_date

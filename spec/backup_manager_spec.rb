@@ -26,5 +26,16 @@ RSpec.describe 'BackupManager' do
 
       expect(backup.expired?).to eq(true)
     end
+
+    it 'returns argument error when inputed date is under plan start date' do
+      plan_start_date = Date.parse('2023-09-27')
+      input_date = '2023-09-26'
+
+      allow(Date).to receive(:today).and_return(plan_start_date)
+
+      backup = BackupManager.new('beginner', input_date)
+
+      expect { backup.expired? }.to raise_error(ArgumentError)
+    end
   end
 end

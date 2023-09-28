@@ -20,12 +20,12 @@ class BackupManager
 
   private
 
-  def invalid_date?
-    @user_date < @plan.start_date
+  def valid_date?
+    @user_date >= @plan.start_date
   end
 
   def validate_arguments
-    return unless invalid_date?
+    return if valid_date?
 
     raise ArgumentError, 'User date must be after plan start date'
   end

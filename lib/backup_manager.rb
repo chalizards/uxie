@@ -1,25 +1,30 @@
-# frozen_string_literal: true
-
-require 'date'
-require 'plans'
-require 'pry'
-
 class BackupManager
-  def initialize(plan, date, start_date = nil)
-    @plan = plan
-    @start_date = start_date || Date.today.to_s
-    @date = date
+  require 'date'
+
+  def initialize(plan_name, user_date, _plan_start_date = nil)
+    @plan_start_date = Date.today
+    @plan = Plan.new(plan_name, @plan_start_date)
+    @user_date = Date.parse(user_date)
   end
 
   def expired?
-    plan = Plans.new
-    plan_days = plan.calculate_plan_days(@plan, @start_date)
+    validate_arguments
 
-    start_date = Date.parse(@start_date)
-    user_input_date = Date.parse(@date)
+    plan_days = @plan.calculate_plan_days
+    expiration_date = @plan_start_date + plan_days
 
-    expiration_date = start_date + plan_days
+    @user_date > expiration_date
+  end
 
-    user_input_date > expiration_date
+  private
+
+  def invalid_date?
+    @user_date < @plan_start_date
+  end
+
+  def validate_arguments
+    return unless invalid_date?
+
+    raise ArgumentError, 'User date must be after plan start date'
   end
 end

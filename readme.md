@@ -1,9 +1,12 @@
-### How to run the code
+# README
+### Running the code
+- call the uxie script, passing as argument the plan name and the date you want to check
 ```
 irb uxie_script.rb "beginner", "2023/01/23"
 ```
 
-### How to run the tests
+
+### Running the tests
 
 ```
 rspec -fd

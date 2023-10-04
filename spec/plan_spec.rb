@@ -1,47 +1,78 @@
 # frozen_string_literal: true
 
+require 'spec_helper'
+
 RSpec.describe 'Plan' do
-  require 'plan'
-  require 'date'
-
-  context 'initialize' do
-    it 'returns Plan object when plan_name is valid' do
+  describe 'initialize' do
+    it 'returns Plan object when plan name is valid' do
       plan_name = 'beginner'
-      plan_start_date = '2023-09-27'
 
-      plan = Plan.new('beginner', '2023-09-27')
+      plan = Plan.new('beginner')
+
       expect(plan).to be_a(Plan)
-      expect(plan.plan_name).to eq(plan_name.to_sym)
-      expect(plan.start_date).to eq(Date.parse(plan_start_date))
+      expect(plan.name).to eq(plan_name.to_sym)
     end
 
-    it 'returns ArgumentError when plan_name is invalid' do
+    it 'returns ArgumentError when plan name is invalid' do
       plan_name = 'begginner'
-      plan_start_date = '2023-09-27'
 
-      expect { Plan.new(plan_name, plan_start_date) }.to raise_error(ArgumentError)
+      expect { Plan.new(plan_name) }.to raise_error(ArgumentError)
     end
   end
 
-  context 'calculate_plan_days' do
-    date = '2023-09-27'
+  describe 'calculate_dates' do
+    it 'returns 42 dates when date unit is daily' do
+      plan = Plan.new('beginner')
 
-    it 'returns 42 days for beginner plan' do
-      plan = Plan.new('beginner', date)
+      dates = plan.calculate_dates(:daily)
 
-      expect(plan.calculate_plan_days).to eq(42)
+      expect(dates.count).to eq(42)
     end
 
-    it 'returns 408 days for pro plan' do
-      plan = Plan.new('pro', date)
+    it 'returns 12 dates when date unit is monthly' do
+      plan = Plan.new('pro')
 
-      expect(plan.calculate_plan_days).to eq(408)
+      dates = plan.calculate_dates(:monthly)
+
+      expect(dates.count).to eq(12)
     end
 
-    it 'returns 2964 days for ultra plan' do
-      plan = Plan.new('ultra', date)
+    it 'returns 7 dates when date unit is yearly' do
+      plan = Plan.new('ultra')
 
-      expect(plan.calculate_plan_days).to eq(2964)
+      dates = plan.calculate_dates(:yearly)
+
+      expect(dates.count).to eq(7)
+    end
+  end
+
+  describe 'get_beginner_dates' do
+    it 'returns 42 dates when plan is beginner' do
+      plan = Plan.new('beginner')
+
+      dates = plan.get_beginner_dates
+
+      expect(dates.count).to eq(42)
+    end
+
+    describe 'get_pro_dates' do
+      it 'returns 54 dates when plan is pro' do
+        plan = Plan.new('pro')
+
+        dates = plan.get_pro_dates
+
+        expect(dates.count).to eq(54)
+      end
+    end
+
+    describe 'get_ultra_dates' do
+      it 'returns 61 dates when plan is ultra' do
+        plan = Plan.new('ultra')
+
+        dates = plan.get_ultra_dates
+
+        expect(dates.count).to eq(61)
+      end
     end
   end
 end

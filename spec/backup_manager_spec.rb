@@ -1,41 +1,55 @@
 # frozen_string_literal: true
 
+require 'spec_helper'
+
 RSpec.describe 'BackupManager' do
-  require 'backup_manager'
-  require 'plan'
+  describe 'keep_backup?' do
+    let(:date) { Date.parse('2023-10-03') }
 
-  context 'expired?' do
-    it 'returns false when inputed date is under expiration date' do
-      plan_start_date = Date.parse('2023-09-27')
-      input_date = '2023-09-27'
-
-      allow(Date).to receive(:today).and_return(plan_start_date)
-
-      backup = BackupManager.new('beginner', input_date)
-
-      expect(backup.expired?).to eq(false)
+    before do
+      allow(Date).to receive(:today).and_return(date)
     end
 
-    it 'returns true when inputed date is greater expiration date' do
-      expiration_date = Date.parse('2023-09-27') - 42
-      input_date = '2023-09-28'
+    context 'when plan is beginner' do
+      it 'returns true when date is in dates range' do
+        response = BackupManager.new('beginner', '2023-10-03').keep_backup?
 
-      allow(Date).to receive(:today).and_return(expiration_date)
+        expect(response).to eq(true)
+      end
 
-      backup = BackupManager.new('beginner', input_date)
+      it 'returns false when date is out of dates range' do
+        response = BackupManager.new('beginner', '2023-06-30').keep_backup?
 
-      expect(backup.expired?).to eq(true)
+        expect(response).to eq(false)
+      end
     end
 
-    it 'returns argument error when inputed date is under plan start date' do
-      plan_start_date = Date.parse('2023-09-27')
-      input_date = '2023-09-26'
+    context 'when plan is pro' do
+      it 'returns true when date is in dates range' do
+        response = BackupManager.new('pro', '2023-07-31').keep_backup?
 
-      allow(Date).to receive(:today).and_return(plan_start_date)
+        expect(response).to eq(true)
+      end
 
-      backup = BackupManager.new('beginner', input_date)
+      it 'returns false when date is out of dates range' do
+        response = BackupManager.new('pro', '2022-09-30').keep_backup?
 
-      expect { backup.expired? }.to raise_error(ArgumentError)
+        expect(response).to eq(false)
+      end
+    end
+
+    context 'when plan is ultra' do
+      it 'returns true when date is in dates range' do
+        response = BackupManager.new('ultra', '2021-12-31').keep_backup?
+
+        expect(response).to eq(true)
+      end
+
+      it 'returns false when date is out of dates range' do
+        response = BackupManager.new('ultra', '2015-12-31').keep_backup?
+
+        expect(response).to eq(false)
+      end
     end
   end
 end

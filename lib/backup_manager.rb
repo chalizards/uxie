@@ -1,32 +1,29 @@
 # frozen_string_literal: true
 
-class BackupManager
-  require 'date'
+require 'date'
+require_relative 'validator'
 
-  def initialize(plan_name, user_date, plan_start_date = nil)
-    @plan = Plan.new(plan_name, plan_start_date)
-    @user_date = Date.parse(user_date)
+class BackupManager
+  attr_reader :plan, :user_date
+
+  def initialize(plan_name, date)
+    @plan = Plan.new(plan_name)
+    @user_date = Date.parse(date)
   end
 
-  def expired?
-    validate_arguments
+  def keep_backup?
+    dates = get_plan_dates
 
-    plan_days = @plan.calculate_plan_days
-
-    expiration_date = @plan.start_date + plan_days
-
-    @user_date > expiration_date
+    dates.include?(@user_date)
   end
 
   private
 
-  def valid_date?
-    @user_date >= @plan.start_date
-  end
+  def get_plan_dates
+    plan_dates = { beginner: -> { @plan.get_beginner_dates },
+                   pro: -> { @plan.get_pro_dates },
+                   ultra: -> { @plan.get_ultra_dates } }
 
-  def validate_arguments
-    return if valid_date?
-
-    raise ArgumentError, 'User date must be after plan start date'
+    plan_dates[@plan.name].call
   end
 end

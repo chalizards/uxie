@@ -1,81 +1,98 @@
 # frozen_string_literal: true
 
-class Plan
-  require 'date'
+require 'date'
+require_relative 'validator'
 
-  attr_reader :plan_name, :start_date
+class Plan
+  attr_reader :name
 
   PLAN_DAYS = 42
   PLAN_MONTHS = 12
   PLAN_YEARS = 7
 
-  def initialize(plan_name, start_date)
-    @plan_name = check_plan_name(plan_name)
-    @start_date = check_plan_start_date(start_date)
+  def initialize(name)
+    @name = Validator.check_plan_name(name)
   end
 
-  def calculate_plan_days
-    plan_duration_in_days
+  def get_beginner_dates
+    calculate_beginner_dates
   end
 
-  def plans
-    { beginner: { days: PLAN_DAYS, months: 0, years: 0 },
-      pro: { days: PLAN_DAYS, months: PLAN_MONTHS, years: 0 },
-      ultra: { days: PLAN_DAYS, months: PLAN_MONTHS, years: PLAN_YEARS } }
+  def get_pro_dates
+    calculate_pro_dates
+  end
+
+  def get_ultra_dates
+    calculate_ultra_dates
+  end
+
+  def calculate_dates(date_unit)
+    date = Date.today
+    dates = []
+
+    calculate = {
+      daily: lambda {
+        calculate_daily_dates(date, dates)
+      },
+      monthly: lambda {
+        calculate_monthly_dates(date, dates)
+      },
+      yearly: lambda {
+        calculate_yearly_dates(date, dates)
+      }
+    }
+
+    calculate[date_unit].call
   end
 
   private
 
-  def check_plan_name(plan_name)
-    plan_name = format_plan_name(plan_name)
+  def calculate_daily_dates(date, dates)
+    return dates if dates.count == PLAN_DAYS
 
-    if valid_plan_name?(plan_name)
-      plan_name
-    else
-      raise ArgumentError, 'Invalid plan name'
-    end
+    dates << date
+    last_date = date - 1
+
+    calculate_daily_dates(last_date, dates)
   end
 
-  def format_plan_name(plan_name)
-    plan_name = plan_name.downcase
-    plan_name_sym = plan_name.to_sym
+  def calculate_monthly_dates(date, dates)
+    return dates if dates.count == PLAN_MONTHS
 
-    plan_name_sym
+    last_date = date >> -1
+    last_day_of_month_date = Date.new(last_date.year, last_date.month, -1)
+
+    dates << last_day_of_month_date
+
+    calculate_monthly_dates(last_day_of_month_date, dates)
   end
 
-  def valid_plan_name?(plan_name)
-    plans.keys.include?(plan_name)
+  def calculate_yearly_dates(date, dates)
+    return dates if dates.count == PLAN_YEARS
+
+    last_year = date.year - 1
+    last_year_date = Date.new(last_year, 12, 31)
+    dates << last_year_date
+
+    calculate_yearly_dates(last_year_date, dates)
   end
 
-  def check_plan_start_date(plan_start_date)
-    if plan_start_date
-      Date.parse(plan_start_date)
-    else
-      Date.today
-    end
+  def calculate_beginner_dates
+    calculate_dates(:daily)
   end
 
-  def plan_duration_in_days
-    plan = plans[@plan_name]
+  def calculate_pro_dates
+    daily = calculate_dates(:daily)
+    monthly = calculate_dates(:monthly)
 
-    days = plan[:days]
-    months = plan[:months]
-    years = plan[:years]
-
-    years_in_months = years_to_months(years)
-    total_months = months + years_in_months
-    months_in_days = months_to_days(@start_date, total_months)
-
-    days + months_in_days
+    daily + monthly
   end
 
-  def years_to_months(years)
-    years * 12
-  end
+  def calculate_ultra_dates
+    daily = calculate_dates(:daily)
+    monthly = calculate_dates(:monthly)
+    yearly = calculate_dates(:yearly)
 
-  def months_to_days(start_date, months)
-    date = start_date >> months
-
-    (date - start_date).to_i
+    daily + monthly + yearly
   end
 end

@@ -6,7 +6,7 @@ require_relative 'validator'
 class Plan
   attr_reader :name
 
-  PLAN_DAYS = 42
+  PLAN_DAYS = 42 + 1
   PLAN_MONTHS = 12
   PLAN_YEARS = 7
 
@@ -47,8 +47,24 @@ class Plan
 
   private
 
+  def end_calc?(dates, date_unit)
+    cond = {
+      daily: lambda {
+        dates.count == PLAN_DAYS
+      },
+      monthly: lambda {
+        dates.count == PLAN_MONTHS
+      },
+      yearly: lambda {
+        dates.count == PLAN_YEARS
+      }
+    }
+
+    cond[date_unit].call
+  end
+
   def calculate_daily_dates(date, dates)
-    return dates if dates.count == PLAN_DAYS
+    return dates if end_calc?(dates, :daily)
 
     dates << date
     last_date = date - 1
@@ -57,7 +73,7 @@ class Plan
   end
 
   def calculate_monthly_dates(date, dates)
-    return dates if dates.count == PLAN_MONTHS
+    return dates if end_calc?(dates, :monthly)
 
     last_date = date >> -1
     last_day_of_month_date = Date.new(last_date.year, last_date.month, -1)
@@ -68,7 +84,7 @@ class Plan
   end
 
   def calculate_yearly_dates(date, dates)
-    return dates if dates.count == PLAN_YEARS
+    return dates if end_calc?(dates, :yearly)
 
     last_year = date.year - 1
     last_year_date = Date.new(last_year, 12, 31)

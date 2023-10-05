@@ -11,6 +11,8 @@ module Validator
     plan_name
   end
 
+  private
+
   def format_plan_name(plan_name)
     plan_name = plan_name.downcase
     plan_name.to_sym

@@ -4,19 +4,23 @@ require 'spec_helper'
 
 RSpec.describe 'Plan' do
   describe 'initialize' do
-    it 'returns Plan object when plan name is valid' do
-      plan_name = 'beginner'
+    context 'when plan name is valid' do
+      it 'returns Plan object' do
+        plan_name = 'beginner'
 
-      plan = Plan.new('beginner')
+        plan = Plan.new('beginner')
 
-      expect(plan).to be_a(Plan)
-      expect(plan.name).to eq(plan_name.to_sym)
+        expect(plan).to be_a(Plan)
+        expect(plan.name).to eq(plan_name.to_sym)
+      end
     end
 
-    it 'returns ArgumentError when plan name is invalid' do
-      plan_name = 'begginner'
+    context 'when plan name is invalid' do
+      it 'returns ArgumentError' do
+        plan_name = 'begginner'
 
-      expect { Plan.new(plan_name) }.to raise_error(ArgumentError)
+        expect { Plan.new(plan_name) }.to raise_error(ArgumentError)
+      end
     end
   end
 

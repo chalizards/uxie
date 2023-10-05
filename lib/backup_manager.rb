@@ -23,7 +23,6 @@ class BackupManager
     plan_dates = { beginner: -> { @plan.get_beginner_dates },
                    pro: -> { @plan.get_pro_dates },
                    ultra: -> { @plan.get_ultra_dates } }
-
     plan_dates[@plan.name].call
   end
 end

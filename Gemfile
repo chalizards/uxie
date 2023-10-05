@@ -10,6 +10,6 @@ gem 'rubocop', '~> 1.56'
 
 gem 'reek', '~> 6.1'
 
-gem "rake", "~> 13.0"
+gem 'rake', '~> 13.0'
 
-gem "bundler", "~> 2.3"
+gem 'bundler', '~> 2.3'

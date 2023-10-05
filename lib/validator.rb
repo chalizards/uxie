@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# The Validator module is responsible for validating plan data.
 module Validator
   PLANS = %i[beginner pro ultra].freeze
 

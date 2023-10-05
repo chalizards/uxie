@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
+
 require 'spec_helper'
 
 RSpec.describe 'BackupManager' do
@@ -85,3 +87,5 @@ RSpec.describe 'BackupManager' do
     end
   end
 end
+
+# rubocop:enable Metrics/BlockLength

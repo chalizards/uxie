@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 
@@ -9,4 +11,4 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.patterns = ['**/*.rb']
 end
 
-task :default => [:spec]
+task default: [:spec]

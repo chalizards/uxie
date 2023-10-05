@@ -3,6 +3,7 @@
 require 'date'
 require_relative 'validator'
 
+# The Plan class calculates dates based on the chosen plan type (beginner, pro, ultra).
 class Plan
   attr_reader :name
 
@@ -14,53 +15,49 @@ class Plan
     @name = Validator.check_plan_name(name)
   end
 
-  def get_beginner_dates
-    calculate_beginner_dates
+  def calculate_beginner_dates
+    calculate_dates(:daily)
   end
 
-  def get_pro_dates
-    calculate_pro_dates
+  def calculate_pro_dates
+    daily = calculate_dates(:daily)
+    monthly = calculate_dates(:monthly)
+
+    daily + monthly
   end
 
-  def get_ultra_dates
-    calculate_ultra_dates
+  def calculate_ultra_dates
+    daily = calculate_dates(:daily)
+    monthly = calculate_dates(:monthly)
+    yearly = calculate_dates(:yearly)
+
+    daily + monthly + yearly
   end
+
+  private
 
   def calculate_dates(date_unit)
     date = Date.today
     dates = []
 
-    calculate = {
-      daily: lambda {
-        calculate_daily_dates(date, dates)
-      },
-      monthly: lambda {
-        calculate_monthly_dates(date, dates)
-      },
-      yearly: lambda {
-        calculate_yearly_dates(date, dates)
-      }
-    }
-
-    calculate[date_unit].call
+    case date_unit
+    when :daily
+      calculate_daily_dates(date, dates)
+    when :monthly
+      calculate_monthly_dates(date, dates)
+    when :yearly
+      calculate_yearly_dates(date, dates)
+    end
   end
-
-  private
 
   def end_calc?(dates, date_unit)
     cond = {
-      daily: lambda {
-        dates.count == PLAN_DAYS
-      },
-      monthly: lambda {
-        dates.count == PLAN_MONTHS
-      },
-      yearly: lambda {
-        dates.count == PLAN_YEARS
-      }
+      daily: dates.count == PLAN_DAYS,
+      monthly: dates.count == PLAN_MONTHS,
+      yearly: dates.count == PLAN_YEARS
     }
 
-    cond[date_unit].call
+    cond[date_unit]
   end
 
   def calculate_daily_dates(date, dates)
@@ -91,24 +88,5 @@ class Plan
     dates << last_year_date
 
     calculate_yearly_dates(last_year_date, dates)
-  end
-
-  def calculate_beginner_dates
-    calculate_dates(:daily)
-  end
-
-  def calculate_pro_dates
-    daily = calculate_dates(:daily)
-    monthly = calculate_dates(:monthly)
-
-    daily + monthly
-  end
-
-  def calculate_ultra_dates
-    daily = calculate_dates(:daily)
-    monthly = calculate_dates(:monthly)
-    yearly = calculate_dates(:yearly)
-
-    daily + monthly + yearly
   end
 end

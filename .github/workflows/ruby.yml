@@ -32,11 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Tests
-        run: rspec
+        run: bundle exec rake
 
   lint:
     needs: common-setup
     runs-on: ubuntu-latest
     steps:
       - name: Run Rubocop
-        run: rubocop
+        run: bundle exec rubocop

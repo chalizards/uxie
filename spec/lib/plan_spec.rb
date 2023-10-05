@@ -25,12 +25,12 @@ RSpec.describe 'Plan' do
   end
 
   describe 'calculate_dates' do
-    it 'returns 42 dates when date unit is daily' do
+    it 'returns 43 dates when date unit is daily' do
       plan = Plan.new('beginner')
 
       dates = plan.calculate_dates(:daily)
 
-      expect(dates.count).to eq(42)
+      expect(dates.count).to eq(43)
     end
 
     it 'returns 12 dates when date unit is monthly' do
@@ -51,31 +51,31 @@ RSpec.describe 'Plan' do
   end
 
   describe 'get_beginner_dates' do
-    it 'returns 42 dates when plan is beginner' do
+    it 'returns 43 dates when plan is beginner' do
       plan = Plan.new('beginner')
 
       dates = plan.get_beginner_dates
 
-      expect(dates.count).to eq(42)
+      expect(dates.count).to eq(43)
     end
 
     describe 'get_pro_dates' do
-      it 'returns 54 dates when plan is pro' do
+      it 'returns 55 dates when plan is pro' do
         plan = Plan.new('pro')
 
         dates = plan.get_pro_dates
 
-        expect(dates.count).to eq(54)
+        expect(dates.count).to eq(55)
       end
     end
 
     describe 'get_ultra_dates' do
-      it 'returns 61 dates when plan is ultra' do
+      it 'returns 62 dates when plan is ultra' do
         plan = Plan.new('ultra')
 
         dates = plan.get_ultra_dates
 
-        expect(dates.count).to eq(61)
+        expect(dates.count).to eq(62)
       end
     end
   end

@@ -15,7 +15,7 @@ ruby uxie_script.rb "beginner" "2023-10-03"
 ```
 rspec -fd
 ```
-- The `spec/lib/backup_manager_spec.rb`` file contains tests for all dates listed in the table below:
+- The `spec/lib/backup_manager_spec.rb` file contains tests for all dates listed in the table below:
   
 | Date       | Beginner   | Pro        | Ultra     |
 |------------|------------|------------|-----------|

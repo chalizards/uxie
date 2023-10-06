@@ -13,3 +13,7 @@ gem 'reek', '~> 6.1'
 gem 'rake', '~> 13.0'
 
 gem 'bundler', '~> 2.3'
+
+gem "simplecov", "~> 0.22.0"
+
+gem "fasterer", "~> 0.10.1"

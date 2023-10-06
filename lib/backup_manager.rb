@@ -15,17 +15,31 @@ class BackupManager
   end
 
   def keep_backup?
-    dates = plan_dates
+    dates = []
+
+    case @plan.name
+    when :beginner
+      dates = beginner_dates
+    when :pro
+      dates = pro_dates
+    when :ultra
+      dates = ultra_dates
+    end
 
     dates.include?(@user_date)
   end
 
   private
 
-  def plan_dates
-    plan_dates = { beginner: -> { @plan.calculate_beginner_dates },
-                   pro: -> { @plan.calculate_pro_dates },
-                   ultra: -> { @plan.calculate_ultra_dates } }
-    plan_dates[@plan.name].call
+  def beginner_dates
+    @plan.calculate_beginner_dates
+  end
+
+  def pro_dates
+    @plan.calculate_pro_dates
+  end
+
+  def ultra_dates
+    @plan.calculate_ultra_dates
   end
 end

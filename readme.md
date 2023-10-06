@@ -1,6 +1,12 @@
 # README
-### Running the code
-- Execute the UXIE script by providing the plan name and the desired date as arguments:
+## Running the code
+### Starting the Container
+```
+docker compose up -d
+docker exec -ti uxie /bin/bash
+```
+### Using the Uxie script
+- Execute the Uxie script by providing the plan name and the desired date as arguments:
 ```
 ruby uxie_script.rb "beginner" "2023-10-03"
 ```
@@ -9,7 +15,7 @@ ruby uxie_script.rb "beginner" "2023-10-03"
 ```
 rspec -fd
 ```
-- The spec/lib/backup_manager_spec.rb file contains tests for all the example dates listed in the table below:
+- The `spec/lib/backup_manager_spec.rb`` file contains tests for all dates listed in the table below:
   
 | Date       | Beginner   | Pro        | Ultra     |
 |------------|------------|------------|-----------|
@@ -25,5 +31,6 @@ rspec -fd
 | 2021-12-30 | delete ❌   | delete ❌   | delete ❌  |
 | 2016-12-31 | delete ❌   | delete ❌   | retain ✅  |
 | 2015-12-31 | delete ❌   | delete ❌   | delete ❌  |
+
 
 ![uxie](https://cdn.cardsrealm.com/images/cartas/sm6-forbidden-light/en/crop-med/uxie-41131-41.jpeg?5202)

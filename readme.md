@@ -1,5 +1,11 @@
 # README
-### Running the code
+## Running the code
+### Starting the Container
+```
+docker compose up -d
+docker exec -ti uxie /bin/bash
+```
+### Using the Uxie script
 - Execute the Uxie script by providing the plan name and the desired date as arguments:
 ```
 ruby uxie_script.rb "beginner" "2023-10-03"
@@ -9,7 +15,7 @@ ruby uxie_script.rb "beginner" "2023-10-03"
 ```
 rspec -fd
 ```
-- The `spec/lib/backup_manager_spec.rb`` file contains tests for all the example dates listed in the table below:
+- The `spec/lib/backup_manager_spec.rb`` file contains tests for all dates listed in the table below:
   
 | Date       | Beginner   | Pro        | Ultra     |
 |------------|------------|------------|-----------|
